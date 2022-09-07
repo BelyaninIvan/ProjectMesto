@@ -23,48 +23,7 @@
             </section>
             <section class="cards">
                 <ul class="cards__list">
-                    <li class="card">
-                        <img src="images/saratov.jpg" alt="Саратов" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Саратов</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
-                    <li class="card">
-                        <img src="images/kazan.jpg" alt="Казань" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Казань</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
-                    <li class="card">
-                        <img src="images/moscow.jpg" alt="Москва" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Москва</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
-                    <li class="card">
-                        <img src="images/saint-petersburg.jpg" alt="Санкт-Петербург" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Санкт-Петербург</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
-                    <li class="card">
-                        <img src="images/sochi.jpg" alt="Сочи" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Сочи</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
-                    <li class="card">
-                        <img src="images/vladivostok.jpg" alt="Владивосток" class="card__img">
-                        <div class="card__description">
-                            <h2 class="card__title">Владивосток</h2>
-                            <button class="card__like-button" type="button"></button>
-                        </div>
-                    </li>
+                    
                 </ul>
             </section>
         </main>
@@ -73,7 +32,7 @@
         </footer>
     </div>
 
-    <div class="popup">
+    <div class="popup popup_type_edit-profile">
         <div class="popup__container">
             <button class="popup__button-close" type="button"></button>
             <h2 class="popup__title">
@@ -86,6 +45,40 @@
             </form>
         </div>
     </div>
+
+    <div class="popup popup_type_addcard">
+        <div class="popup__container">
+            <button class="popup__button-close" type="button"></button>
+            <h2 class="popup__title">
+                Новое место
+            </h2>
+            <form class="popup__form" name="popup-form">
+                <input type="text" class="popup__input popup__input_type_cardName" name="name" placeholder="Название">
+                <input type="text" class="popup__input popup__input_type_cardImage" name="description" placeholder="Ссылка на картинку">
+                <button class="popup__submit-button" type="submit">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup popup_type_image">
+        <div class="popup__container popup__container_content_img">
+            <button class="popup__button-close" type="button"></button>
+            <img src="" alt="" class="popup__img">
+            <p class="popup__caption"></p>
+        </div>
+    </div>
+
+    <template id="card-template">
+        <li class="card">
+            <img src="" alt="" class="card__img">
+            <button class="card__delete-button" type="button"></button>
+            <div class="card__description">
+                <h2 class="card__title"></h2>
+                <button class="card__like-button" type="button"></button>
+            </div>
+        </li>
+    </template>
+
     <script src="./scripts/index.js"></script>
 </body>
 </html>
