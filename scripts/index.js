@@ -1,4 +1,5 @@
-// Находим форму в DOM
+const Esc_Keycode = 27;
+
 const popup = document.querySelector('.popup');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupAddCard = document.querySelector('.popup_type_addcard');
@@ -56,11 +57,33 @@ const toggleModalWindow = (modalWindow) => {
     modalWindow.classList.toggle('popup_opened');
 };
 
+const openModalWindow = (modalWindow) => {
+    modalWindow.classList.add('popup_opened');
+    document.addEventListener('keyup', handleEscUp);
+};
+
+const closeModalWindow = (modalWindow) => {
+    modalWindow.classList.remove('popup_opened');
+    document.removeEventListener('keyup', handleEscUp);
+};
+
+const isEscClick = (evt, action) => {
+    const activePopup = document.querySelector('.popup_opened');
+    if (evt.which === Esc_Keycode) {
+        action(activePopup);
+    };
+};
+
+const handleEscUp = (evt) => {
+    evt.preventDefault();
+    isEscClick(evt, closeModalWindow);
+};
+
 const formSubmitHandler = (evt) => {
     evt.preventDefault();
     nameProfile.textContent = nameInput.value;
     descrProfile.textContent = descrInput.value;
-    toggleModalWindow(popupEditProfile);
+    closeModalWindow(popupEditProfile);
 };
 editProfileformElement.addEventListener('submit', formSubmitHandler);
 
@@ -70,12 +93,12 @@ const addCardSubmitHandler = (evt) => {
         image: cardImageInput.value, 
         name: cardNameInput.value
     }, cardList);
-    toggleModalWindow(popupAddCard);
+    closeModalWindow(popupAddCard);
 };
 addCardformElement.addEventListener('submit', addCardSubmitHandler);
 
 profileEditBtn.addEventListener('click', () => {
-    toggleModalWindow(popupEditProfile);
+    openModalWindow(popupEditProfile);
     nameInput.value = nameProfile.textContent;
     descrInput.value = descrProfile.textContent;
 });
@@ -83,7 +106,7 @@ profileEditBtn.addEventListener('click', () => {
 profileAddButton.addEventListener('click', () => {
     cardImageInput.value = '';
     cardNameInput.value = '';
-    toggleModalWindow(popupAddCard);
+    openModalWindow(popupAddCard);
 });
 
 const zoomImgHandler = (data) => {
@@ -91,12 +114,30 @@ const zoomImgHandler = (data) => {
     imageElement.alt = `Изображение ${data.name}`;
 
     captionElement.textContent = data.name;
-    toggleModalWindow(popupImgZoom);
+    openModalWindow(popupImgZoom);
 };
 
-editProfileCloseBtn.addEventListener('click', () => toggleModalWindow(popupEditProfile));
-addCardCloseBtn.addEventListener('click', () => toggleModalWindow(popupAddCard));
-imageZoomCloseBtn.addEventListener('click', () => toggleModalWindow(popupImgZoom));
+editProfileCloseBtn.addEventListener('click', () => closeModalWindow(popupEditProfile));
+addCardCloseBtn.addEventListener('click', () => closeModalWindow(popupAddCard));
+imageZoomCloseBtn.addEventListener('click', () => closeModalWindow(popupImgZoom));
+
+popupEditProfile.addEventListener('click', (evt) => {
+    if(evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close')) {
+        closeModalWindow(popupEditProfile);
+    };
+});
+
+popupAddCard.addEventListener('click', (evt) => {
+    if(evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close')) {
+        closeModalWindow(popupAddCard);
+    };
+});
+
+popupImgZoom.addEventListener('click', (evt) => {
+    if(evt.target.classList.contains('popup') || evt.target.classList.contains('popup__close')) {
+        closeModalWindow(popupImgZoom);
+    };
+});
 
 const likeIconHandler = (evt) => {
     evt.target.classList.toggle('card__like-button_active');
@@ -133,54 +174,3 @@ const renderCard = (data, wrap) => {
 initialCards.forEach((data) => {
     renderCard(data, cardList);
 });
-
-const showInputError = (formElement, inputElement, errorMessage) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    const submitButton = formElement.querySelector('.popup__submit-button');
-    inputElement.classList.add('popup__input_type_error');
-    submitButton.classList.add('popup__submit-button_inactive');
-    submitButton.setAttribute('disable', true);
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add('popup__input-error_active');
-};
-
-const hideInputError = (formElement, inputElement) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    const submitButton = formElement.querySelector('.popup__submit-button');
-    inputElement.classList.remove('popup__input_type_error');
-    submitButton.classList.remove('popup__submit-button_inactive');
-    submitButton.removeAttribute('disable', false);
-    errorElement.classList.remove('popup__input-error_active');
-    errorElement.textContent = '';
-}
-
-const isValid = (formElement, inputElement) => {
-    if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, inputElement.validationMessage);
-    } else {
-        hideInputError(formElement, inputElement);
-    }
-};
-
-const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-
-    inputList.forEach((inputElement) => {
-        inputElement.addEventListener('input', () => {
-            isValid(formElement, inputElement);
-        });
-    });
-};
-
-const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
-
-    formList.forEach((formElement) => {
-        formElement.addEventListener('submit', function(evt) {
-            evt.preventDefault();
-          });
-        setEventListeners(formElement);
-    });
-};
-
-enableValidation();
